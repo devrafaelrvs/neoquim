@@ -9,7 +9,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={ROUTES.produto(product.slug)}
-      className="flex flex-col gap-3 rounded-xl bg-product p-5 text-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+      className="flex w-full flex-col gap-3 rounded-xl bg-product p-5 text-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
       <FlaskIcon className="h-5 w-5 text-white/90" />
       <h3 className="text-sm font-bold">{product.titulo}</h3>
