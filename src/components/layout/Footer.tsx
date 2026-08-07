@@ -10,6 +10,7 @@ import {
   CONTACT_CHANNELS,
 } from '@/entity/company/constants/company.constants';
 import { toMailtoHref, toTelHref } from '@/utils/url.utils';
+import { Logo } from './Logo';
 
 export function Footer() {
   const ano = new Date().getFullYear();
@@ -21,13 +22,7 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
 
-            <Image
-              src="/logo/logo-neoquim-solido.png"
-              alt={COMPANY.razaoSocial}
-              width={60}
-              height={104}
-              className="h-20 w-auto"
-              />
+           <Logo className="h-15 w-auto md:h-15" />
               </div>
             <p className="text-sm font-semibold">{COMPANY.razaoSocial}</p>
             <p className="text-sm text-white/70">{COMPANY.atividade}</p>

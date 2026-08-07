@@ -35,6 +35,8 @@ type ButtonProps = CommonProps &
 type ButtonLinkProps = CommonProps &
   Omit<ComponentProps<typeof Link>, keyof CommonProps>;
 
+type ButtonAnchorProps = CommonProps & Omit<ComponentProps<'a'>, keyof CommonProps>;
+
 export function Button({
   variant = 'primary',
   size = 'md',
@@ -66,5 +68,27 @@ export function ButtonLink({
     >
       {children}
     </Link>
+  );
+}
+
+/**
+ * Mesmo visual do `Button`, mas em `<a>` nativo — para href que não é rota de
+ * página do App Router (download, route handler, link externo), onde o `Link`
+ * tentaria uma navegação de cliente que não existe.
+ */
+export function ButtonAnchor({
+  variant = 'primary',
+  size = 'md',
+  className,
+  children,
+  ...props
+}: ButtonAnchorProps) {
+  return (
+    <a
+      className={cn(BASE, VARIANTS[variant], SIZES[size], className)}
+      {...props}
+    >
+      {children}
+    </a>
   );
 }

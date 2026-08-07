@@ -121,6 +121,51 @@ export function ExternalLinkIcon(props: IconProps) {
   );
 }
 
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <path d="M12 3v12M7 11l5 5 5-5" />
+      <path d="M4 19h16" />
+    </svg>
+  );
+}
+
+export function UploadIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <path d="M12 19V7M7 11l5-5 5 5" />
+      <path d="M4 21h16" />
+    </svg>
+  );
+}
+
+export function TrashIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      <path d="M6 7v13a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7M10 11v6M14 11v6" />
+    </svg>
+  );
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <rect x="4" y="10" width="16" height="11" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    </svg>
+  );
+}
+
+export function FileIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7l-4-4Z" />
+      <path d="M14 3v4h4" />
+    </svg>
+  );
+}
+
 /** Glifo do WhatsApp — preenchido, não traçado. */
 export function WhatsAppIcon(props: IconProps) {
   return (

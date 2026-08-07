@@ -17,9 +17,9 @@ export function Logo({ className }: { className?: string }) {
         src="/logo/logo-neoquim.png"
         alt={COMPANY.razaoSocial}
         width={100}
-        height={44}
+        height={100}
         priority
-        className="h-9 w-auto md:h-10"
+        className="h-15  w-auto md:h-15"
         />
         </div>
     </Link>
