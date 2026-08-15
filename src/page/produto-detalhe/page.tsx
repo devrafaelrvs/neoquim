@@ -5,6 +5,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { ArrowRightIcon, FlaskIcon } from '@/components/ui/Icons';
 import { Section, SectionTitle } from '@/components/ui/Section';
 import { ROUTES } from '@/constants/routes.constants';
+import { ProductLine } from '@/entity/product/components/ProductLine';
 import { RelatedProducts } from '@/entity/product/components/RelatedProducts';
 import { PRODUCT_DOC_NOTE } from '@/entity/product/constants/products.constants';
 import type { Product } from '@/entity/product/product.entity';
@@ -37,17 +38,7 @@ export function ProdutoDetalhePage({ product }: { product: Product }) {
               </SectionTitle>
 
               {product.linha.length > 0 ? (
-                <ul className="flex flex-col gap-2">
-                  {product.linha.map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-3 text-sm leading-relaxed text-muted"
-                    >
-                      <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <ProductLine grupos={product.linha} />
               ) : (
                 <p className="text-sm leading-relaxed text-muted">
                   {PRODUTO_DETALHE.linhaPendente}
@@ -68,7 +59,7 @@ export function ProdutoDetalhePage({ product }: { product: Product }) {
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl lg:sticky lg:top-24 lg:self-start">
             <Image
               src={product.imagem}
-              alt={`Produção da Neoquim — ${product.titulo}`}
+              alt={product.imagemAlt}
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"

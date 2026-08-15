@@ -11,7 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: ROUTES.home, priority: 1 },
     { url: ROUTES.produtos, priority: 0.9 },
     { url: ROUTES.sobre, priority: 0.7 },
+    { url: ROUTES.sustentabilidade, priority: 0.7 },
     { url: ROUTES.contato, priority: 0.7 },
+    { url: ROUTES.canalDenuncias, priority: 0.4 },
   ];
 
   const produtos = getAllProductSlugs().map((slug) => ({

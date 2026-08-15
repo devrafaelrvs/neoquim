@@ -1,4 +1,5 @@
 import { PageHero } from '@/components/layout/PageHero';
+import { MissaoVisaoValoresSection } from '@/page/sobre/components/MissaoVisaoValoresSection';
 import { QualidadeSection } from '@/page/sobre/components/QualidadeSection';
 import { QuemSomosSobre } from '@/page/sobre/components/QuemSomosSobre';
 import { TrajetoriaSection } from '@/page/sobre/components/TrajetoriaSection';
@@ -12,6 +13,7 @@ export function SobrePage() {
         subtitulo={SOBRE_PAGE.heroSubtitulo}
       />
       <QuemSomosSobre />
+      <MissaoVisaoValoresSection />
       <TrajetoriaSection />
       <QualidadeSection />
     </>

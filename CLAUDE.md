@@ -65,9 +65,13 @@ src/
 │   │   │   └── CtaEspecificacaoSection.tsx
 │   │   └── constants/
 │   │       └── home.constants.ts # hero, mercados, títulos de seção, CTA
-│   ├── sobre/                    # QuemSomosSobre, TrajetoriaSection, QualidadeSection
+│   ├── sobre/                    # QuemSomosSobre, MissaoVisaoValoresSection,
+│   │                             # TrajetoriaSection, QualidadeSection
 │   ├── produtos/                 # page.tsx + produtos.constants.ts
 │   ├── produto-detalhe/          # page.tsx + Breadcrumb + constants
+│   ├── sustentabilidade/         # page.tsx + PilarSection + constants
+│   ├── canal-denuncias/          # page.tsx + constants (texto legal)
+│   ├── admin/                    # painel restrito — page.tsx + constants
 │   └── contato/                  # page.tsx + contato.constants.ts
 │
 ├── entity/                       # camada de DOMÍNIO — reutilizável entre páginas
@@ -85,9 +89,20 @@ src/
 │   │   ├── components/ContactForm.tsx, ContactInfo.tsx, ContactMap.tsx
 │   │   ├── hooks/useContactForm.ts           # useActionState
 │   │   └── constants/contact.constants.ts
+│   ├── denuncia/
+│   │   ├── denuncia.entity.ts    # schema Zod, assuntos, DenunciaFormState
+│   │   ├── action/sendDenuncia.ts            # "use server"
+│   │   ├── services/denuncia-email.service.ts # Resend, caixa de compliance
+│   │   ├── components/DenunciaForm.tsx
+│   │   ├── hooks/useDenunciaForm.ts
+│   │   └── constants/denuncia.constants.ts
+│   ├── admin/                    # login da área restrita (sessão HMAC em cookie,
+│   │                             # bloqueio após 5 erros)
+│   ├── certificate/              # certificado ISO no Vercel Blob (store privado)
 │   └── company/
 │       ├── company.entity.ts
-│       ├── constants/company.constants.ts    # NAP, ISO, timeline, WHATSAPP
+│       ├── constants/company.constants.ts    # NAP, ISO, timeline, WHATSAPP,
+│       │                                     # missão/visão/valores, política SGQ
 │       └── components/Timeline.tsx, CertificationBanner.tsx
 │
 ├── components/                   # UI compartilhada, sem domínio
@@ -168,6 +183,8 @@ Nunca `../../../`.
 |---|---|
 | `entity/contact/components/ContactForm.tsx` | estado do formulário via `useActionState` |
 | `entity/contact/hooks/useContactForm.ts` | hook do React |
+| `entity/denuncia/components/DenunciaForm.tsx` | idem, no canal de denúncias |
+| `entity/denuncia/hooks/useDenunciaForm.ts` | hook do React |
 | `components/layout/MobileMenu.tsx` | abre/fecha e trava o scroll |
 | `components/layout/NavLinks.tsx` | `usePathname` para destacar a rota ativa |
 
@@ -403,9 +420,16 @@ Fonte da verdade para popular as constants. Textos verbatim do site atual.
 | `/sobre` | Sobre nós |
 | `/produtos` | Listagem de produtos |
 | `/produtos/[slug]` | Detalhe do produto |
+| `/sustentabilidade` | Sustentabilidade |
 | `/contato` | Contato |
+| `/canal-de-denuncias` | Canal de Denúncias |
 
-Navegação do header: Home · Sobre nós · Produtos · Contato + botão **"Fale com o comercial"**.
+Navegação do header: Home · Sobre nós · Produtos · Sustentabilidade · Contato + botão
+**"Fale com o comercial"**.
+
+O **Canal de Denúncias fica fora do menu**, só no rodapé, junto do Código de Ética — é um bloco de
+compliance (`FOOTER_COMPLIANCE`), separado da navegação institucional (`FOOTER_NAV`). Precisa estar
+achável de qualquer página, mas não disputa espaço com o funil comercial.
 
 ### Os 11 produtos
 
@@ -427,12 +451,24 @@ Navegação do header: Home · Sobre nós · Produtos · Contato + botão **"Fal
 A home mostra **8** deles (ver Pendências, §12). `/produtos` mostra os 11.
 
 **Estrutura da página de detalhe:** breadcrumb (Home › Produtos › nome) → hero com título e
-subtítulo → descrição → seção "Linha e aplicações" (lista de itens) → nota *"Especificações técnicas,
+subtítulo → descrição → seção "Linha e aplicações" → nota *"Especificações técnicas,
 fichas de segurança e amostras podem ser solicitadas ao nosso time comercial."* → CTA "Solicitar
 informações" (→ `/contato`) → imagem → 4 produtos relacionados.
 
-Exemplo de "Linha e aplicações" (secantes): Octoatos de cobalto, manganês, zircônio, cálcio e zinco ·
-Naftenatos metálicos · Secantes combinados sob especificação do cliente.
+**"Linha e aplicações"** (`ProductLine.tsx`) é uma lista de grupos, cada um com `titulo` opcional e
+itens `{ nome, descricao }` — nome comercial em negrito, descrição técnica ao lado. O `titulo` separa
+aplicações dentro do mesmo produto: Catalisadores divide em Resina Alquídica e Resina Poliéster,
+Revenda em Ácidos e Outros, Secantes em Octoatos, Off-set, Misturas e Naftenatos. Produto sem essa
+divisão traz um único grupo sem título.
+
+As descrições são **transcrição literal** da apresentação comercial da Neoquim. Percentual, faixa de
+temperatura e proporção de uso são informação de formulação — não reescreva.
+
+O material da Neoquim é organizado por mercado e o site por produto. Onde um slide de mercado
+descreve algo que tem página própria, o conteúdo mora na página específica e não é duplicado: as
+resinas alquídicas, os octoatos e os dispersantes que aparecem sob "Tinta Base Solvente" no material
+estão em `/produtos/resinas-alquidicas`, `/produtos/secantes-octoatos-naftenatos` e
+`/produtos/dispersantes-inibidores`. `tinta-base-solvente` fica com o NEOMUL.
 
 ### Home
 
@@ -495,6 +531,41 @@ Hero: *"Principais Produtos e Matérias Primas"* /
 Hero: *"Contato"* / *"Nosso time comercial e técnico está à disposição para orçamentos, amostras e
 especificações."*
 
+### Sustentabilidade
+
+Três pilares, cada um foto de um lado e texto do outro, alternando o lado a cada bloco no desktop
+(`PilarSection`, com `invertido` e `fundoClaro` derivados do índice).
+
+| Pilar | Texto | Imagem |
+|---|---|---|
+| Tratamento de Efluentes | Estação própria, com reaproveitamento de 100% da água utilizada na produção. | `ete-efluentes.jpg` |
+| Usina Solar Fotovoltaica | Instalação de uma Usina Solar Fotovoltaica com injeção na rede elétrica. | `usina-solar.jpg` |
+| Linhas de Produtos Biodegradáveis | Ésteres de base renovável NEOGREEN e UNIGREEN. | `tanques-verdes.jpg` |
+
+Os dois primeiros textos são da Neoquim. O terceiro veio sem redação definida e sem foto indicada:
+o texto foi escrito a partir do que o material técnico diz das linhas NEOGREEN/UNIGREEN e a foto é a
+que mais se aproxima do tema. **Confirmar os dois com o comercial** (ver §12).
+
+### Canal de Denúncias
+
+Texto institucional + citação legal + formulário, em duas colunas no desktop.
+
+O bloco **IMPORTANTE** cita o § 1º Art. 23 da Lei 14.457/2022 e o art. 216-A do Código Penal —
+avisa que o canal não substitui o procedimento penal. É **citação legal literal: não reescreva,
+não resuma, não "melhore"**. O mesmo vale para os três parágrafos de abertura, que são texto
+aprovado pela empresa.
+
+Na mesma página, link para o Código de Ética (`DOCUMENTOS.codigoEtica`), que abre o PDF em nova aba.
+
+### Missão, visão, valores e política (no /sobre)
+
+Entre "Quem somos" e "Nossa trajetória". Missão e visão em cards, valores em lista (Agilidade ·
+Pontualidade · Qualidade), e a Política do Sistema de Gestão em bloco com o gradiente da marca.
+
+Moram em `entity/company/constants/company.constants.ts`, não na pasta da página: são dados
+institucionais da empresa, não copy de rota. A **Política do Sistema de Gestão é transcrição
+literal do CEC-8.5** — mesmo texto auditado na ISO 9001. Alteração só vem do responsável pelo SGQ.
+
 ### Dados da empresa (`company.constants.ts`)
 
 | Campo | Valor |
@@ -513,13 +584,37 @@ Telefones renderizados como `<a href="tel:+5511...">` e e-mails como `mailto:`.
 
 Servidas de `public/images/` e `public/logo/`.
 
-| Arquivo | Uso |
-|---|---|
-| `planta-aerea.jpg` (1600×1000) | hero da home, "Quem somos" no /sobre, card Revenda |
-| `petroleo.jpg` | card Petróleo Perfuração, destaque em /produtos |
-| `tintas.jpg` | card Tintas e Vernizes |
-| `reatores.jpg` | seção Qualidade certificada |
-| `logo-neoquim.png` | header e footer |
+São **fotos reais da unidade de Itaquaquecetuba**, entregues pela Neoquim. As quatro imagens de IA
+que existiam antes foram substituídas — não gere imagem sintética para este site.
+
+| Arquivo | Dimensões | Foto | Uso |
+|---|---|---|---|
+| `planta-aerea.jpg` | 1686×1081 | vista aérea da unidade | hero da home, "Quem somos" no /sobre, card Revenda, Open Graph, JSON-LD |
+| `petroleo.jpg` | 1296×968 | parque de tanques de armazenagem | card Petróleo, destaque em /produtos |
+| `tintas.jpg` | 968×1296 | galpão com tambores paletizados | card Tintas e Vernizes, produto Dispersantes |
+| `reatores.jpg` | 968×1296 | interior da fábrica com os reatores | Qualidade certificada, produto Secantes |
+| `torre-reacao.jpg` | 968×1296 | torre de reação e tanques inox | produto Resinas Alquídicas |
+| `tanques-verdes.jpg` | 968×1296 | tanques verdes de estocagem | produto Ácidos Graxos |
+| `tanques-inox.jpg` | 968×1296 | tanques inox ao pé da torre | produto Catalisadores |
+| `carregamento-granel.jpg` | 968×1296 | caminhão-tanque carregando | produto Éster |
+| `tambores-galpao.jpg` | 968×1296 | corredor de tambores | produto Tinta Base Solvente |
+| `tanques-processo.jpg` | 968×1296 | tanques de processo e utilidades | produto Tinta Base D'água |
+| `armazem-tambores.jpg` | 968×1296 | armazém com tambores em pallets | produto Tinta Off-Set |
+| `importacao-container.jpg` | 1296×968 | carreta com contêiner em descarga | produto Revenda de Matéria Prima |
+| `logo-neoquim.png` | — | — | header e footer |
+
+Só `planta-aerea`, `petroleo` e `importacao-container` são **paisagem**; o resto é retrato em slots
+que renderizam paisagem. O `object-cover` recorta pelo centro e funciona porque o assunto ocupa o
+quadro inteiro — mas, ao trocar por outra foto, prefira paisagem.
+
+**Acervo completo:** as 17 fotos originais estão em `assets/fotos-neoquim/`, **fora de `public/`**,
+com um README mapeando origem → destino. Isso é intencional: tudo que entra em `public/` é servido
+publicamente e vai inteiro para o deploy. Para usar uma foto nova, copie para `public/images/` com
+nome descritivo em kebab-case — nunca aponte o `src` para `assets/`.
+
+**Todo `alt` descreve a foto, não o produto.** Uma foto de tanques com `alt="Ácidos Graxos"` não
+ajuda quem usa leitor de tela. Os textos vivem em `home.constants.ts`, `sobre.constants.ts` e no
+campo `imagemAlt` de cada produto em `products.constants.ts`. Ao trocar a imagem, troque o `alt`.
 
 O logo é claro (elipse branca com texto azul) — funciona sobre o gradiente escuro do header e do
 footer, **não** sobre fundo branco sem ajuste.
@@ -534,7 +629,11 @@ footer, **não** sobre fundo branco sem ajuste.
 - `metadataBase` e `openGraph` configurados no `layout.tsx` raiz, com imagem de preview.
 - JSON-LD no `layout.tsx`: `Organization` e `LocalBusiness` com o NAP da §9 (endereço, telefones,
   horário). Em `/produtos/[slug]`, adicione `BreadcrumbList`.
-- `sitemap.ts` gerando as 5 rotas + as 11 de produto a partir das constants — nunca lista manual.
+- `sitemap.ts` gerando as 6 rotas fixas + as 11 de produto a partir das constants — nunca lista
+  manual. `/canal-de-denuncias` entra com prioridade baixa (0.4): precisa ser indexável para quem
+  busca pelo canal, mas não compete com as páginas comerciais.
+- `/admin-fileconfig-neoquim` **nunca** entra no sitemap nem no `robots.txt` (ver
+  `entity/admin/constants/auth.constants.ts`).
 - `robots.ts` liberando tudo e apontando para o sitemap.
 - `lang="pt-BR"` no `<html>`.
 - Um único `<h1>` por página.
@@ -559,7 +658,16 @@ NEXT_PUBLIC_WHATSAPP_MESSAGE=
 RESEND_API_KEY=
 CONTACT_EMAIL_TO=
 CONTACT_EMAIL_FROM=
+DENUNCIA_EMAIL_TO=          # caixa de compliance, SEPARADA da comercial
+BLOB_READ_WRITE_TOKEN=      # injetado pela Vercel quando o store está conectado
+ADMIN_USER=
+ADMIN_PASSWORD=             # SEMPRE entre aspas
+ADMIN_SESSION_SECRET=
 ```
+
+**Senha entre aspas, sem exceção.** O parser de `.env` corta valor sem aspas no primeiro `#`:
+`ADMIN_PASSWORD=abc@#123` chega ao servidor como `abc@` — sem erro, sem aviso, e o login
+simplesmente nunca autentica.
 
 ---
 
@@ -574,26 +682,42 @@ Itens em aberto — **pergunte ao responsável, não invente valor**.
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | `5511999999999` (genérico) | número comercial real da Neoquim |
 | `CONTACT_EMAIL_TO` | `contato@livpro.com.br` | trocar por `vendas@neoquim.com.br` ou pela caixa dedicada a lead |
 | `CONTACT_EMAIL_FROM` | `onboarding@resend.dev` (sandbox) | remetente em domínio verificado no Resend |
-| `RESEND_API_KEY` | vazio | **enquanto estiver vazio o formulário valida mas não envia** — a action registra o erro no log e mostra a mensagem genérica |
+| `RESEND_API_KEY` | vazio | **enquanto estiver vazio os dois formulários validam mas não enviam** — a action registra o erro no log e mostra a mensagem genérica |
 | `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | domínio final (afeta OG, canonical, sitemap e JSON-LD) |
+| `DENUNCIA_EMAIL_TO` | vazio | caixa de compliance (RH/Diretoria). **Não aponte para `vendas@`** — o CEC-8.5 exige sigilo do informante |
+| `ADMIN_USER` / `ADMIN_PASSWORD` | credencial provisória | definir com o responsável da Neoquim |
 
 ### Conteúdo
 
-1. **"Linha e aplicações" de 10 dos 11 produtos** — só `secantes-octoatos-naftenatos` tem os itens
-   reais. Nos demais o campo `linha` está vazio de propósito e a página mostra um texto de fallback.
+1. **"Linha e aplicações" de `tinta-base-agua`** — os outros 10 produtos foram preenchidos com a
+   transcrição literal da apresentação comercial da Neoquim. Este não tem slide correspondente no
+   material recebido, então o campo `linha` segue vazio e a página mostra o texto de fallback.
    Preencher em `products.constants.ts` **com o time técnico** — descrição de produto químico errada
-   tem consequência real para quem formula.
+   tem consequência real para quem formula, e pelo mesmo motivo as descrições já transcritas não
+   devem ser reescritas sem passar por eles.
 2. **Quais 8 dos 11 produtos** vão na home. Hoje `destaqueHome: false` em Tinta Off-Set, Revenda de
    Matéria Prima e Dispersantes e Inibidores, espelhando o site atual — confirme se é intencional.
 3. **Imagem de Open Graph** dedicada — hoje usa `planta-aerea.jpg`.
-4. **Imagens próprias por produto** — só existem 4 fotos, reaproveitadas entre os 11 produtos.
+4. **Distribuição das fotos por produto** — cada um dos 11 já tem imagem distinta, mas a escolha foi
+   feita por semelhança visual, sem o comercial. Nenhuma foto retrata o produto em si: são cenas da
+   unidade. Confirmar se a associação faz sentido e se falta foto de algum processo específico.
+   `ETE Neoquim` e as três da usina solar agora são usadas em `/sustentabilidade`.
+5. **PDF do Código de Ética não está no repositório.** O link do rodapé e da página
+   `/canal-de-denuncias` aponta para `public/documentos/codigo-de-etica-neoquim.pdf`, que **ainda
+   não existe — os dois links respondem 404**. Copiar o PDF original do CEC-8.5 para lá com esse
+   nome exato. Ver `public/documentos/LEIA-ME.md`. O original não foi recriado a partir do texto de
+   propósito: é documento controlado do SGQ, e um arquivo remontado pareceria oficial sem ser.
+6. **Terceiro pilar de sustentabilidade** — "Linhas de Produtos Biodegradáveis" veio sem redação e
+   sem foto definida. O texto atual foi escrito a partir do que o material técnico diz das linhas
+   NEOGREEN/UNIGREEN, e a foto (`tanques-verdes.jpg`) foi escolhida por aproximação. Validar os dois.
 
 ### Técnico
 
-5. **`npm run lint`** ainda não tem ESLint configurado no projeto.
-6. **Sem rate limiting** no formulário. O honeypot pega bot burro; um limite por IP exige
-   infraestrutura (Upstash, middleware) e ainda não foi decidido.
-7. **npm incremental quebra neste projeto** — `npm install -D <pacote>` falha com
+7. **`npm run lint`** ainda não tem ESLint configurado no projeto.
+8. **Sem rate limiting** nos formulários. O honeypot pega bot burro; um limite por IP exige
+   infraestrutura (Upstash, middleware) e ainda não foi decidido. Vale especialmente para o canal de
+   denúncias, que é anônimo por natureza e portanto o alvo mais fácil de flood.
+9. **npm incremental quebra neste projeto** — `npm install -D <pacote>` falha com
    `Invalid Version:` por um bug de dedupe do npm 11 com os binários de plataforma do Next 16.
    Para adicionar dependência: edite o `package.json` à mão e rode
    `rm -rf node_modules package-lock.json && npm install`.

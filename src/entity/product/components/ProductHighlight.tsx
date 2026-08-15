@@ -13,7 +13,7 @@ export function ProductHighlight({ product }: { product: Product }) {
       <div className="relative aspect-[21/9] w-full">
         <Image
           src={product.imagem}
-          alt={product.titulo}
+          alt={product.imagemAlt}
           fill
           priority
           sizes="(max-width: 1152px) 100vw, 1152px"

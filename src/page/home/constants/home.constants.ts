@@ -22,21 +22,24 @@ export const MERCADOS: Mercado[] = [
     descricao:
       'Lubrificantes, Redutores, Emulsificantes primários e secundários.',
     imagem: '/images/petroleo.jpg',
-    imagemAlt: 'Plataforma de perfuração de petróleo ao entardecer',
+    imagemAlt:
+      'Parque de tanques de armazenagem de matérias-primas da Neoquim',
   },
   {
     titulo: 'Tintas e Vernizes',
     descricao:
       'Secantes, resinas alquídicas, dispersantes e inibidores de secatividade.',
     imagem: '/images/tintas.jpg',
-    imagemAlt: 'Mistura de pigmentos coloridos',
+    imagemAlt:
+      'Galpão da Neoquim com tambores de insumos químicos paletizados',
   },
   {
     titulo: 'Revenda e Importação',
     descricao:
       'Distribuição de matérias-primas químicas nacionais e importadas.',
     imagem: '/images/planta-aerea.jpg',
-    imagemAlt: 'Vista aérea dos tanques de armazenagem da Neoquim',
+    imagemAlt:
+      'Vista aérea dos galpões e do parque de tanques da Neoquim em Itaquaquecetuba/SP',
   },
 ];
 

@@ -3,7 +3,10 @@ import Link from 'next/link';
 
 import { Container } from '@/components/ui/Container';
 import { MailIcon, MapPinIcon, PhoneIcon } from '@/components/ui/Icons';
-import { FOOTER_NAV } from '@/constants/navigation.constants';
+import {
+  FOOTER_COMPLIANCE,
+  FOOTER_NAV,
+} from '@/constants/navigation.constants';
 import {
   ADDRESS,
   COMPANY,
@@ -83,6 +86,24 @@ export function Footer() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Compliance separado da navegação: precisa estar achável de qualquer página. */}
+        <div className="border-t border-white/15 py-6">
+          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            {FOOTER_COMPLIANCE.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                {...(item.externo
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+                className="inline-flex min-h-11 items-center text-sm font-medium text-white/80 underline underline-offset-4 transition-colors hover:text-white"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
         </div>
       </Container>
     </footer>

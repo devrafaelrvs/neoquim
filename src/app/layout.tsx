@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { WhatsAppFab } from '@/components/WhatsAppFab';
+
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Insumos para tintas, vernizes e perfuração de petróleo`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
-    images: [{ url: '/images/planta-aerea.jpg', width: 1600, height: 1000 }],
+    images: [{ url: '/images/planta-aerea.jpg', width: 1686, height: 1081 }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -53,7 +53,6 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <WhatsAppFab />
       </body>
     </html>
   );
