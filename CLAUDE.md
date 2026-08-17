@@ -28,7 +28,7 @@ Existe um protótipo em `https://neoquim-lp-builder.lovable.app/` construído no
 | Linguagem | TypeScript em modo `strict` | 5.9 |
 | Estilo | Tailwind CSS (tokens via `@theme` no CSS) | 4.3 |
 | Validação | Zod | 4.4 |
-| E-mail | Resend, disparado por Server Action | 6.18 |
+| E-mail | SMTP via nodemailer, disparado por Server Action | 9.0 |
 | Utilitários | `clsx` + `tailwind-merge` (helper `cn`) | — |
 | Renderização | SSG — as 19 rotas saem estáticas do build | — |
 
@@ -85,14 +85,14 @@ src/
 │   ├── contact/
 │   │   ├── contact.entity.ts     # schema Zod, ContactFormState, tipos
 │   │   ├── action/sendContactMessage.ts      # "use server"
-│   │   ├── services/email.service.ts         # Resend + escape de HTML
+│   │   ├── services/email.service.ts         # monta o HTML do lead
 │   │   ├── components/ContactForm.tsx, ContactInfo.tsx, ContactMap.tsx
 │   │   ├── hooks/useContactForm.ts           # useActionState
 │   │   └── constants/contact.constants.ts
 │   ├── denuncia/
 │   │   ├── denuncia.entity.ts    # schema Zod, assuntos, DenunciaFormState
 │   │   ├── action/sendDenuncia.ts            # "use server"
-│   │   ├── services/denuncia-email.service.ts # Resend, caixa de compliance
+│   │   ├── services/denuncia-email.service.ts # HTML + caixa de compliance
 │   │   ├── components/DenunciaForm.tsx
 │   │   ├── hooks/useDenunciaForm.ts
 │   │   └── constants/denuncia.constants.ts
@@ -114,9 +114,13 @@ src/
 │   ├── WhatsAppFab.tsx
 │   └── JsonLd.tsx                # dados estruturados LocalBusiness
 │
+├── services/                     # INFRAESTRUTURA compartilhada entre entidades
+│   └── mailer.service.ts         # único ponto que conhece SMTP (nodemailer)
+│
 ├── constants/routes.constants.ts, navigation.constants.ts, seo.constants.ts
 ├── hooks/                        # hooks genéricos (vazio por ora)
-└── utils/cn.ts, url.utils.ts     # cn, toWhatsAppUrl, toTelHref, toMailtoHref
+└── utils/cn.ts, url.utils.ts,    # cn, toWhatsAppUrl, toTelHref, toMailtoHref,
+    format.utils.ts, html.utils.ts # formatMinutos, escapeHtml
 ```
 
 As imagens ficam em `public/images/` e o logo em `public/logo/`.
@@ -140,10 +144,19 @@ viraria a URL `/home/page` e quebraria o build. O singular é intencional. O mes
 ### Regra de dependência
 
 ```
-app  →  page  →  entity  →  components / constants / hooks / utils
+app  →  page  →  entity  →  components / constants / hooks / services / utils
 ```
 
 O fluxo é de mão única.
+
+**`src/services/` vs `src/utils/`** — os dois são acessíveis por `entity`, mas não são a mesma coisa.
+`utils/` são funções puras: entra valor, sai valor, sem efeito nem configuração (`cn`, `escapeHtml`,
+`toTelHref`). `services/` é infraestrutura: lê variável de ambiente, abre conexão, fala com o mundo
+de fora.
+
+`mailer.service.ts` nasceu aqui porque **duas** entidades precisam do mesmo transporte SMTP
+(`contact` e `denuncia`) e a regra acima proíbe uma entidade importar da outra. Um service dentro de
+`entity/contact/` obrigaria `entity/denuncia/` a atravessar lateralmente.
 
 - `entity` **nunca** importa de `page` ou de `app`.
 - `page/home` **nunca** importa de `page/contato` — se dois páginas precisam da mesma coisa, ela sobe
@@ -362,9 +375,14 @@ Fluxo ponta a ponta:
 ContactForm ("use client")
   └─ useContactForm (useActionState)
        └─ sendContactMessage  ("use server")
-            ├─ contactSchema.safeParse()   ← validação que vale
-            └─ email.service.ts → Resend
+            ├─ contactSchema.safeParse()      ← validação que vale
+            └─ email.service.ts               ← monta o HTML, resolve CONTACT_EMAIL_TO
+                 └─ services/mailer.service.ts → SMTP (nodemailer)
 ```
+
+O canal de denúncias tem o mesmo desenho (`DenunciaForm` → `useDenunciaForm` → `sendDenuncia` →
+`denuncia-email.service.ts` → `mailer.service.ts`). **O transporte é compartilhado; as caixas de
+destino não** — `CONTACT_EMAIL_TO` e `DENUNCIA_EMAIL_TO` são endereços diferentes.
 
 **Campos** (todos obrigatórios): Nome, Empresa, E-mail, Telefone, Produto de interesse (select),
 Mensagem. Botão: "Enviar mensagem".
@@ -385,22 +403,50 @@ esse retorno e o `useFormStatus` dá o estado de "enviando".
 **Variáveis de ambiente**
 
 ```
-RESEND_API_KEY=re_xxxxxxxxxxxx
+SMTP_HOST=smtp.zcs.jetmailx.com.br          # host do PROVEDOR, não o CNAME
+SMTP_PORT=465                               # 465 = SSL · 587 = STARTTLS
+SMTP_SECURE=true                            # sem valor, é deduzido da porta
+SMTP_USER=postmaster@neoquim.com.br         # e-mail COMPLETO da caixa
+SMTP_PASSWORD="senha-entre-aspas"
+MAIL_FROM=                                  # vazio = usa SMTP_USER
 CONTACT_EMAIL_TO=vendas@neoquim.com.br      # destino do lead
-CONTACT_EMAIL_FROM=site@neoquim.com.br      # remetente de domínio verificado no Resend
 ```
+
+O provedor de e-mail é a **jetmailx** (Zimbra). Quatro coisas que fazem o SMTP falhar:
+
+- **`SMTP_HOST` não pode ser `smtp.neoquim.com.br`.** Esse nome é CNAME para
+  `smtp.zcs.jetmailx.com.br`, mas o certificado do servidor cobre só `*.zcs.jetmailx.com.br`,
+  `*.jetmailx.com.br` e o domínio de alguns outros clientes — **não o da Neoquim**. Conectar pelo
+  CNAME estoura `ERR_TLS_CERT_ALTNAME_INVALID`. Nunca "resolva" isso com
+  `tls: { rejectUnauthorized: false }`: desligar a validação expõe a senha da caixa a MITM. Se
+  quiser usar o CNAME, peça à jetmailx para incluir `smtp.neoquim.com.br` no certificado — eles já
+  fazem isso para outros clientes.
+- **`SMTP_PASSWORD` sem aspas** — o parser de `.env` corta no primeiro `#` e a senha chega truncada,
+  sem erro. Já aconteceu neste projeto com `ADMIN_PASSWORD`. O sintoma é `EAUTH`, que parece
+  credencial errada.
+- **`MAIL_FROM` diferente de `SMTP_USER`** — hospedagem compartilhada recusa relay de remetente que
+  não seja o autenticado, e o que passa cai em spam por SPF. Deixe vazio.
+- **Porta 25** — bloqueada na Vercel. Só 465 ou 587 (as duas estão abertas na jetmailx).
+
+Para separar "credencial errada" de "código errado", `mailer.service.ts` exporta `verifySmtp()`, que
+testa host, porta e login sem enviar mensagem.
 
 **Regras de segurança — não negociáveis**
 
-1. `RESEND_API_KEY` **nunca** com prefixo `NEXT_PUBLIC_`. Só é lida dentro de `email.service.ts`,
-   que por sua vez só é importado pela Server Action. Endurecimento opcional: instalar o pacote
-   `server-only` e importá-lo no topo do service, para que o build quebre se alguém encostar esse
-   arquivo em um componente de cliente.
+1. As `SMTP_*` **nunca** com prefixo `NEXT_PUBLIC_` — a senha da caixa iria para o bundle do
+   navegador. Só são lidas dentro de `services/mailer.service.ts`, que por sua vez só é importado
+   pelos services de entidade, chamados apenas pelas Server Actions. Endurecimento opcional:
+   instalar o pacote `server-only` e importá-lo no topo do mailer, para o build quebrar se alguém
+   encostar esse arquivo em um componente de cliente.
 2. Validação no servidor é a que conta. A validação no cliente existe só para UX.
-3. `reply-to` do e-mail = e-mail do lead, para o comercial responder direto na thread.
+3. `reply-to` do e-mail = e-mail do lead, para o comercial responder direto na thread. **No canal de
+   denúncias, `reply-to` é proibido** — responder por reflexo a uma denúncia anônima é o vazamento
+   que o canal existe para evitar. Por isso o parâmetro é opcional em `sendMail`.
 4. Honeypot obrigatório contra bot.
-5. Nunca interpole dado do formulário cru no HTML do e-mail — escape antes.
-6. Mensagem de erro ao usuário é genérica. Detalhe técnico vai para o log do servidor, não para a tela.
+5. Nunca interpole dado do formulário cru no HTML do e-mail — escape antes com `escapeHtml`
+   (`utils/html.utils.ts`).
+6. Mensagem de erro ao usuário é genérica. Detalhe técnico vai para o log do servidor, não para a
+   tela. No canal de denúncias, **o log também não recebe o conteúdo do relato** — só a falha.
 
 **Estados da UI:** repouso → enviando (botão desabilitado, label muda) → sucesso (mensagem em
 `text-ok`, formulário limpo) → erro (mensagem por campo e mensagem geral). Erros de campo ligados
@@ -655,9 +701,13 @@ npm run typecheck  # tsc --noEmit
 NEXT_PUBLIC_SITE_URL=https://www.neoquim.com.br
 NEXT_PUBLIC_WHATSAPP_NUMBER=
 NEXT_PUBLIC_WHATSAPP_MESSAGE=
-RESEND_API_KEY=
+SMTP_HOST=
+SMTP_PORT=465               # 465 = SSL · 587 = STARTTLS
+SMTP_SECURE=true            # sem valor, é deduzido da porta
+SMTP_USER=                  # e-mail COMPLETO da caixa
+SMTP_PASSWORD=              # SEMPRE entre aspas
+MAIL_FROM=                  # vazio = usa SMTP_USER
 CONTACT_EMAIL_TO=
-CONTACT_EMAIL_FROM=
 DENUNCIA_EMAIL_TO=          # caixa de compliance, SEPARADA da comercial
 BLOB_READ_WRITE_TOKEN=      # injetado pela Vercel quando o store está conectado
 ADMIN_USER=
@@ -665,9 +715,13 @@ ADMIN_PASSWORD=             # SEMPRE entre aspas
 ADMIN_SESSION_SECRET=
 ```
 
-**Senha entre aspas, sem exceção.** O parser de `.env` corta valor sem aspas no primeiro `#`:
-`ADMIN_PASSWORD=abc@#123` chega ao servidor como `abc@` — sem erro, sem aviso, e o login
-simplesmente nunca autentica.
+**Senha entre aspas, sem exceção** — vale para `ADMIN_PASSWORD` e `SMTP_PASSWORD`. O parser de `.env`
+corta valor sem aspas no primeiro `#`: `ADMIN_PASSWORD=abc@#123` chega ao servidor como `abc@` — sem
+erro, sem aviso, e o login simplesmente nunca autentica. No SMTP o sintoma é um `EAUTH` que parece
+credencial errada.
+
+**Para adicionar dependência**, `npm install <pacote>` incremental quebra neste projeto (ver §12):
+edite o `package.json` à mão e rode `rm -rf node_modules package-lock.json && npm install`.
 
 ---
 
@@ -680,9 +734,8 @@ Itens em aberto — **pergunte ao responsável, não invente valor**.
 | Variável | Valor atual | O que falta |
 |---|---|---|
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | `5511999999999` (genérico) | número comercial real da Neoquim |
-| `CONTACT_EMAIL_TO` | `contato@livpro.com.br` | trocar por `vendas@neoquim.com.br` ou pela caixa dedicada a lead |
-| `CONTACT_EMAIL_FROM` | `onboarding@resend.dev` (sandbox) | remetente em domínio verificado no Resend |
-| `RESEND_API_KEY` | vazio | **enquanto estiver vazio os dois formulários validam mas não enviam** — a action registra o erro no log e mostra a mensagem genérica |
+| `CONTACT_EMAIL_TO` | caixa de teste pessoal | trocar por `vendas@neoquim.com.br` ou pela caixa dedicada a lead |
+| `SMTP_HOST` / `SMTP_USER` / `SMTP_PASSWORD` | vazios | credencial da caixa da Neoquim. **Enquanto estiverem vazios os dois formulários validam mas não enviam** — a action registra o erro no log e mostra a mensagem genérica. Confirmar host e porta com a hospedagem |
 | `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | domínio final (afeta OG, canonical, sitemap e JSON-LD) |
 | `DENUNCIA_EMAIL_TO` | vazio | caixa de compliance (RH/Diretoria). **Não aponte para `vendas@`** — o CEC-8.5 exige sigilo do informante |
 | `ADMIN_USER` / `ADMIN_PASSWORD` | credencial provisória | definir com o responsável da Neoquim |

@@ -1,17 +1,7 @@
-import { Resend } from 'resend';
-
 import { DENUNCIA_ASSUNTO_LABELS } from '@/entity/denuncia/constants/denuncia.constants';
 import type { DenunciaInput } from '@/entity/denuncia/denuncia.entity';
-
-/** Escapa o que veio do formulário antes de ir para o HTML do e-mail. */
-function escapeHtml(valor: string) {
-  return valor
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+import { sendMail } from '@/services/mailer.service';
+import { escapeHtml } from '@/utils/html.utils';
 
 const ANONIMO = 'Não informado (denúncia anônima)';
 
@@ -63,26 +53,18 @@ function buildHtml(dados: DenunciaInput) {
  * Lança em caso de falha — quem chama decide o que mostrar ao usuário.
  */
 export async function sendDenunciaEmail(dados: DenunciaInput) {
-  const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.DENUNCIA_EMAIL_TO;
-  const from = process.env.CONTACT_EMAIL_FROM;
 
-  if (!apiKey || !to || !from) {
+  if (!to) {
     throw new Error(
-      'Configuração de e-mail ausente: defina RESEND_API_KEY, DENUNCIA_EMAIL_TO e CONTACT_EMAIL_FROM.',
+      'Configuração de e-mail ausente: defina DENUNCIA_EMAIL_TO.',
     );
   }
 
-  const resend = new Resend(apiKey);
-
-  const { error } = await resend.emails.send({
-    from,
+  // Sem `replyTo`: ver o bloco acima. Não é esquecimento.
+  await sendMail({
     to,
     subject: `[Confidencial] Denúncia — ${DENUNCIA_ASSUNTO_LABELS[dados.assunto]}`,
     html: buildHtml(dados),
   });
-
-  if (error) {
-    throw new Error(`Resend: ${error.message}`);
-  }
 }

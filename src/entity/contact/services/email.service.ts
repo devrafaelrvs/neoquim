@@ -1,17 +1,7 @@
-import { Resend } from 'resend';
-
 import type { ContactInput } from '@/entity/contact/contact.entity';
 import { getProductBySlug } from '@/entity/product/services/product.service';
-
-/** Escapa o que veio do formulário antes de ir para o HTML do e-mail. */
-function escapeHtml(valor: string) {
-  return valor
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+import { sendMail } from '@/services/mailer.service';
+import { escapeHtml } from '@/utils/html.utils';
 
 function buildHtml(dados: ContactInput) {
   const produto =
@@ -52,30 +42,24 @@ function buildHtml(dados: ContactInput) {
 
 /**
  * Dispara o e-mail do lead para a caixa comercial.
+ *
+ * Caixa própria (`CONTACT_EMAIL_TO`), separada da de compliance — ver
+ * `denuncia-email.service.ts`.
+ *
  * Lança em caso de falha — quem chama decide o que mostrar ao usuário.
  */
 export async function sendContactEmail(dados: ContactInput) {
-  const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_EMAIL_TO;
-  const from = process.env.CONTACT_EMAIL_FROM;
 
-  if (!apiKey || !to || !from) {
-    throw new Error(
-      'Configuração de e-mail ausente: defina RESEND_API_KEY, CONTACT_EMAIL_TO e CONTACT_EMAIL_FROM.',
-    );
+  if (!to) {
+    throw new Error('Configuração de e-mail ausente: defina CONTACT_EMAIL_TO.');
   }
 
-  const resend = new Resend(apiKey);
-
-  const { error } = await resend.emails.send({
-    from,
+  await sendMail({
     to,
-    replyTo: dados.email,
     subject: `Contato pelo site — ${dados.empresa}`,
     html: buildHtml(dados),
+    // O comercial responde o lead direto na thread.
+    replyTo: dados.email,
   });
-
-  if (error) {
-    throw new Error(`Resend: ${error.message}`);
-  }
 }
