@@ -7,7 +7,6 @@ export function formatBytes(bytes: number): string {
 
   return `${(kb / 1024).toFixed(1).replace('.', ',')} MB`;
 }
-
 /** `840000` → `14 minutos`. Arredonda para cima: nunca promete antes da hora. */
 export function formatMinutos(ms: number): string {
   const minutos = Math.max(1, Math.ceil(ms / 60_000));
