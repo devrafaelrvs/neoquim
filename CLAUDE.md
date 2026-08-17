@@ -231,9 +231,10 @@ Cores extraídas do logo e do site. Definidas uma vez em `src/app/globals.css`:
 @import "tailwindcss";
 
 @theme {
-  --color-brand:      #445492;  /* azul da marca (extraído do logo)        */
-  --color-brand-deep: #2f3b68;  /* variação escura                        */
-  --color-accent:     #5fb0d4;  /* azul-claro dos botões do site          */
+  --color-brand:       #3d4095; /* azul da marca — ponta ESCURA do gradiente */
+  --color-brand-light: #4f53ad; /* ponta CLARA do gradiente (direita)      */
+  --color-brand-deep:  #2c2e6d; /* variação escura — hover e menu mobile   */
+  --color-accent:      #5fb0d4; /* azul-claro dos botões do site          */
   --color-ink:        #1c2340;  /* texto principal                        */
   --color-muted:      #5a6178;  /* texto secundário                       */
   --color-line:       #e5e8f0;  /* linhas e divisórias                    */
@@ -267,8 +268,9 @@ na lista, ela vira token novo aqui — não uma exceção inline.
 
 | Token | Onde |
 |---|---|
-| `brand` | header, botões primários, títulos de seção |
-| `brand-deep` | ponta escura dos gradientes, footer |
+| `brand` | ponta escura (esquerda) dos gradientes, botões primários, títulos de seção |
+| `brand-light` | ponta clara (direita) dos gradientes — **só em gradiente**, nunca como fundo chapado |
+| `brand-deep` | hover do botão primário e fundo do menu mobile |
 | `accent` | botão "Fale com o comercial", links de destaque, ícones |
 | `ink` | corpo de texto e títulos |
 | `muted` | descrições, legendas, texto de apoio |
@@ -281,10 +283,19 @@ na lista, ela vira token novo aqui — não uma exceção inline.
 
 Dois gradientes recorrentes no site:
 
-- **Header, hero e bloco de CTA:** `brand-deep` → `brand`, na diagonal (`bg-gradient-to-br`).
-  No hero há ainda uma foto de fundo com overlay do gradiente por cima, em opacidade que preserve
-  contraste do texto branco.
+- **Header, footer, heros, bloco de CTA e faixa de sustentabilidade:** `brand` → `brand-light`,
+  **na horizontal** (`bg-linear-to-r`) — escuro na esquerda, mais claro na direita. A direção é
+  a mesma em todos os sete pontos de propósito: são faixas que se empilham na mesma página e uma
+  diagonal solta quebra a leitura de continuidade. No hero da home há ainda uma foto de fundo com
+  overlay do gradiente por cima (`from-brand/90 to-brand-light/80`), opacidade calibrada para
+  preservar contraste do texto branco.
 - **Cards de produto:** verde-esmeralda sólido com texto branco (os cards da grade de produtos).
+
+**Por que `brand` é a ponta escura e não a clara.** `brand` também pinta botão primário e título de
+seção sobre fundo branco. Se ele virasse a ponta clara do gradiente, esses dois usos cairiam para
+~5,4:1 de contraste. Como está, `brand` (#3d4095) dá 8,9:1 sobre branco e `brand-light` (#4f53ad)
+dá 6,6:1 com texto branco por cima — a coluna direita do footer, que usa `text-white/80`, fica em
+4,8:1. Ao mexer em qualquer um dos dois, refaça essa conta antes.
 
 ### Padrão de card
 
@@ -647,7 +658,8 @@ que existiam antes foram substituídas — não gere imagem sintética para este
 | `tanques-processo.jpg` | 968×1296 | tanques de processo e utilidades | produto Tinta Base D'água |
 | `armazem-tambores.jpg` | 968×1296 | armazém com tambores em pallets | produto Tinta Off-Set |
 | `importacao-container.jpg` | 1296×968 | carreta com contêiner em descarga | produto Revenda de Matéria Prima |
-| `logo-neoquim.png` | — | — | header e footer |
+| `logo-neoquim-branco.png` | 1483×799 | — | header e footer (variante reversa) |
+| `logo-neoquim.png` | 612×408 | — | JSON-LD (`Organization.logo`), fundo claro |
 
 Só `planta-aerea`, `petroleo` e `importacao-container` são **paisagem**; o resto é retrato em slots
 que renderizam paisagem. O `object-cover` recorta pelo centro e funciona porque o assunto ocupa o
@@ -662,8 +674,19 @@ nome descritivo em kebab-case — nunca aponte o `src` para `assets/`.
 ajuda quem usa leitor de tela. Os textos vivem em `home.constants.ts`, `sobre.constants.ts` e no
 campo `imagemAlt` de cada produto em `products.constants.ts`. Ao trocar a imagem, troque o `alt`.
 
-O logo é claro (elipse branca com texto azul) — funciona sobre o gradiente escuro do header e do
-footer, **não** sobre fundo branco sem ajuste.
+**O logo tem duas variantes e elas não são intercambiáveis.**
+
+`logo-neoquim-branco.png` é a versão reversa: elipse branca sólida com o letreiro NEOQUIM **vazado**
+(transparente). É a que o componente `Logo` renderiza, porque header e footer são seus dois únicos
+consumidores e ambos rodam sobre o gradiente da marca. A versão colorida sumia ali — o azul do
+letreiro é praticamente o mesmo azul do fundo, então sobrava só a elipse.
+
+`logo-neoquim.png` (colorido, sobre fundo claro) fica reservado ao `Organization.logo` do JSON-LD,
+que os buscadores exibem sobre branco. Sobre fundo claro a variante branca desaparece pelo motivo
+simétrico — se o logo for para um card ou documento claro, é esta que se usa.
+
+As duas têm proporção diferente (1483×799 contra 612×408), então trocar o `src` de uma pela outra
+sem trocar `width`/`height` distorce a imagem.
 
 ---
 

@@ -4,6 +4,15 @@ import Link from 'next/link';
 import { ROUTES } from '@/constants/routes.constants';
 import { COMPANY } from '@/entity/company/constants/company.constants';
 
+/**
+ * Variante REVERSA do logo (elipse branca, letreiro vazado).
+ *
+ * Header e footer são os dois únicos consumidores, e ambos rodam sobre o
+ * gradiente escuro da marca. O logo colorido some ali: o azul do letreiro é o
+ * mesmo azul do fundo. Sobre fundo claro esta versão desaparece pelo motivo
+ * inverso — se algum dia o logo for para um fundo branco, use
+ * `/logo/logo-neoquim.png`, que é também o que o JSON-LD entrega aos buscadores.
+ */
 export function Logo({ className }: { className?: string }) {
   return (
     <Link
@@ -11,17 +20,14 @@ export function Logo({ className }: { className?: string }) {
       aria-label={`${COMPANY.nome} — página inicial`}
       className={className}
     >
-      <div className="flex items-center gap-2">
-
       <Image
-        src="/logo/logo-neoquim.png"
+        src="/logo/logo-neoquim-branco.png"
         alt={COMPANY.razaoSocial}
-        width={100}
-        height={100}
+        width={1483}
+        height={799}
         priority
-        className="h-15  w-auto md:h-15"
-        />
-        </div>
+        className="h-12 w-auto md:h-14"
+      />
     </Link>
   );
 }

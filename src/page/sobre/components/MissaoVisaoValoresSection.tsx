@@ -46,7 +46,7 @@ export function MissaoVisaoValoresSection() {
           </Card>
         </div>
 
-        <div className="flex gap-4 rounded-xl bg-linear-to-br from-brand-deep to-brand p-6 text-white md:p-8">
+        <div className="flex gap-4 rounded-xl bg-linear-to-r from-brand to-brand-light p-6 text-white md:p-8">
           <ShieldIcon className="mt-1 hidden h-6 w-6 shrink-0 sm:block" />
           <div className="flex flex-col gap-3">
             <h3 className="text-lg font-bold">

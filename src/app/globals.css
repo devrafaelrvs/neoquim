@@ -1,8 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-brand: #445492; /* azul da marca (extraído do logo)          */
-  --color-brand-deep: #2f3b68; /* variação escura                          */
+  --color-brand: #3d4095; /* azul da marca — ponta ESCURA do gradiente */
+  --color-brand-light: #4f53ad; /* ponta CLARA do gradiente (direita)       */
+  --color-brand-deep: #2c2e6d; /* variação escura — hover e menu mobile    */
   --color-accent: #5fb0d4; /* azul-claro dos botões do site            */
   --color-ink: #1c2340; /* texto principal                          */
   --color-muted: #5a6178; /* texto secundário                         */

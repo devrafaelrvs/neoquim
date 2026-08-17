@@ -8,7 +8,7 @@ export function CtaEspecificacaoSection() {
   return (
     <section className="pb-14 md:pb-20">
       <Container>
-        <div className="flex flex-col gap-4 rounded-xl bg-linear-to-r from-brand-deep to-brand p-8 md:p-12">
+        <div className="flex flex-col gap-4 rounded-xl bg-linear-to-r from-brand to-brand-light p-8 md:p-12">
           <h2 className="text-2xl font-bold text-white md:text-3xl">
             {HOME_CTA.titulo}
           </h2>

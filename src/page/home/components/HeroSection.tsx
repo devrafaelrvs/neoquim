@@ -18,7 +18,7 @@ export function HeroSection() {
         className="-z-10 object-cover"
       />
       {/* Overlay: sem ele o texto branco não atinge contraste sobre a foto. */}
-      <div className="absolute inset-0 -z-10 bg-linear-to-br from-brand-deep/90 to-brand/80" />
+      <div className="absolute inset-0 -z-10 bg-linear-to-r from-brand/90 to-brand-light/80" />
 
       <Container>
         <div className="flex max-w-3xl flex-col gap-5 py-20 md:py-32">

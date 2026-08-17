@@ -19,14 +19,11 @@ export function Footer() {
   const ano = new Date().getFullYear();
 
   return (
-    <footer className="bg-linear-to-br from-brand-deep to-brand text-white">
+    <footer className="bg-linear-to-r from-brand to-brand-light text-white">
       <Container>
         <div className="grid gap-10 py-12 md:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-
-           <Logo className="h-15 w-auto md:h-15" />
-              </div>
+            <Logo className="inline-flex self-start" />
             <p className="text-sm font-semibold">{COMPANY.razaoSocial}</p>
             <p className="text-sm text-white/70">{COMPANY.atividade}</p>
             <p className="text-xs text-white/60">

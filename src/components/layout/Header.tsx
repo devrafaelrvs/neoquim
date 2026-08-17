@@ -8,7 +8,7 @@ import { HEADER_CTA } from '@/constants/navigation.constants';
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-linear-to-r from-brand-deep to-brand shadow-sm">
+    <header className="sticky top-0 z-50 bg-linear-to-r from-brand to-brand-light shadow-sm">
       <Container>
         <div className="flex h-16 items-center justify-between gap-4">
           <Logo />

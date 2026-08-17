@@ -13,7 +13,7 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="bg-linear-to-br from-brand-deep to-brand">
+    <section className="bg-linear-to-r from-brand to-brand-light">
       <Container>
         <div className="flex max-w-3xl flex-col gap-4 py-12 md:py-16">
           {children}

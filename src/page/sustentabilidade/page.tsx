@@ -26,7 +26,7 @@ export function SustentabilidadePage() {
         />
       ))}
 
-      <Section className="bg-linear-to-br from-brand-deep to-brand text-white">
+      <Section className="bg-linear-to-r from-brand to-brand-light text-white">
         <div className="flex flex-col items-start gap-4">
           <SectionTitle className="text-white">
             {SUSTENTABILIDADE_PAGE.ctaTitulo}
