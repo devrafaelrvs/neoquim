@@ -755,11 +755,11 @@ Itens em aberto — **pergunte ao responsável, não invente valor**.
    feita por semelhança visual, sem o comercial. Nenhuma foto retrata o produto em si: são cenas da
    unidade. Confirmar se a associação faz sentido e se falta foto de algum processo específico.
    `ETE Neoquim` e as três da usina solar agora são usadas em `/sustentabilidade`.
-5. **PDF do Código de Ética não está no repositório.** O link do rodapé e da página
-   `/canal-de-denuncias` aponta para `public/documentos/codigo-de-etica-neoquim.pdf`, que **ainda
-   não existe — os dois links respondem 404**. Copiar o PDF original do CEC-8.5 para lá com esse
-   nome exato. Ver `public/documentos/LEIA-ME.md`. O original não foi recriado a partir do texto de
-   propósito: é documento controlado do SGQ, e um arquivo remontado pareceria oficial sem ser.
+5. ~~**PDF do Código de Ética não está no repositório.**~~ **Resolvido** — o original do CEC-8.5
+   rev. 04 está em `public/documentos/codigo-de-etica-neoquim.pdf` e os links do rodapé e de
+   `/canal-de-denuncias` abrem o arquivo. Ao publicar revisão nova, sobrescreva mantendo o nome em
+   kebab-case ASCII (o nome de origem, com espaço, acento e parêntese, não serve como URL). Ver
+   `public/documentos/LEIA-ME.md`.
 6. **Terceiro pilar de sustentabilidade** — "Linhas de Produtos Biodegradáveis" veio sem redação e
    sem foto definida. O texto atual foi escrito a partir do que o material técnico diz das linhas
    NEOGREEN/UNIGREEN, e a foto (`tanques-verdes.jpg`) foi escolhida por aproximação. Validar os dois.

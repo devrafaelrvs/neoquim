@@ -2,25 +2,24 @@
 
 Arquivos servidos direto pela URL, sem passar por rota do App Router.
 
-## Pendente: `codigo-de-etica-neoquim.pdf`
+## `codigo-de-etica-neoquim.pdf`
 
-**O arquivo ainda não está aqui.** Enquanto não estiver, o link do Código de Ética
-no rodapé e na página `/canal-de-denuncias` responde 404.
-
-Para publicar: copie o PDF **original** do CEC-8.5 para esta pasta com exatamente
-este nome:
-
-```
-public/documentos/codigo-de-etica-neoquim.pdf
-```
+Original do **CEC-8.5 — Código de Ética e Conduta, revisão 04 (10/04/2026)**,
+publicado com nome em kebab-case. É esse arquivo que abre no link do Código de
+Ética no rodapé e na página `/canal-de-denuncias`.
 
 O caminho está fixado em `DOCUMENTOS.codigoEtica`, em
 `src/constants/routes.constants.ts`.
 
-O PDF original não foi recriado a partir do texto de propósito: é documento
-controlado do SGQ, com cabeçalho de revisão, controle de alterações e aprovação
-do Diretor Industrial. Um arquivo remontado pareceria oficial sem ser o
-controlado — só o original serve.
+O nome do arquivo original (`CEC 8.5- Codigo de ética e conduta Rev 04 (1).pdf`)
+não serve como URL: espaço, acento e parêntese exigem percent-encoding e
+quebram em cliente que normaliza a URL de forma diferente. Sempre renomeie para
+kebab-case ASCII ao publicar aqui.
+
+O PDF não foi recriado a partir do texto de propósito: é documento controlado do
+SGQ, com cabeçalho de revisão, controle de alterações e aprovação do Diretor
+Industrial. Um arquivo remontado pareceria oficial sem ser o controlado — só o
+original serve.
 
 ## Ao publicar uma revisão nova
 
