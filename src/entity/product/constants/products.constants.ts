@@ -15,7 +15,7 @@ import type { Product } from '@/entity/product/product.entity';
  *
  * Única exceção deliberada: `UNIGREEN T` aparece em `ester` e em
  * `petroleo-perfuracao`. O título do produto nomeia a linha UNIGREEN, e é o
- * lubrificante que a descrição de Petróleo Perfuração promete — tirá-lo de
+ * lubrificante que a descrição de Inovação Química na Indústria Petrolífera promete — tirá-lo de
  * qualquer um dos dois deixaria a página incompleta. CONFIRMAR com o comercial.
  *
  * PENDENTE: `tinta-base-agua` não tem nenhum slide no material recebido.
@@ -23,9 +23,9 @@ import type { Product } from '@/entity/product/product.entity';
 export const PRODUCTS: Product[] = [
   {
     slug: 'petroleo-perfuracao',
-    titulo: 'Petróleo Perfuração',
+    titulo: 'Inovação Química na Indústria Petrolífera',
     descricao:
-      'Lubrificantes, Redutores, Emulsificantes primários e secundários.',
+      'Atendemos às demandas mais complexas do setor de perfuração de petróleo com produtos rigorosamente testados. Através do fornecimento de lubrificantes especializados, redutores e sistemas de emulsificantes primários e secundários, entre outros. Entregamos confiabilidade que sua operação exige no campo.',
     detalhe:
       'Linha de insumos para fluidos de perfuração de poços de petróleo, atividade de origem da Neoquim desde 1983.',
     linha: [
@@ -80,8 +80,8 @@ export const PRODUCTS: Product[] = [
     destaqueHome: true,
   },
   {
-    slug: 'secantes-octoatos-naftenatos',
-    titulo: 'Secantes — Octoatos e Naftenatos',
+    slug: 'secantes-octoatos',
+    titulo: 'Secantes — Octoatos',
     descricao:
       'Sabões metálicos para secagem de tintas industriais, produzidos desde 1987.',
     detalhe:
@@ -154,16 +154,6 @@ export const PRODUCTS: Product[] = [
           },
         ],
       },
-      {
-        titulo: 'Naftenatos',
-        itens: [
-          {
-            nome: 'Naftenatos metálicos',
-            descricao:
-              'Sabões metálicos para secagem de tintas industriais, fabricados pela Neoquim desde 1987. Secantes combinados são formulados sob especificação do cliente.',
-          },
-        ],
-      },
     ],
     imagem: '/images/reatores.jpg',
     imagemAlt:
@@ -174,7 +164,7 @@ export const PRODUCTS: Product[] = [
     slug: 'resinas-alquidicas',
     titulo: 'Resinas Alquídicas',
     descricao:
-      'Resinas curtas, médias e longas em óleo para tintas e vernizes.',
+      'Resinas curtas, médias,longas e fenolada em óleo desenvolvidas para a formulação de tintas e vernizes de alta performance',
     detalhe:
       'Produção própria de resinas alquídicas para o mercado de tintas e vernizes, iniciada em 1989.',
     linha: [
@@ -384,7 +374,7 @@ export const PRODUCTS: Product[] = [
     slug: 'revenda-materia-prima',
     titulo: 'Revenda de Matéria Prima',
     descricao:
-      'Distribuição de matérias-primas químicas nacionais e importadas.',
+      'Distribuição Química Global Logistica eficiente na revenda e importação de matérias-primas nacionais e internacionais de alta qualidade.',
     detalhe:
       'Distribuição de matérias-primas químicas nacionais e importadas para a indústria.',
     linha: [

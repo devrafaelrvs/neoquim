@@ -4,7 +4,7 @@ export const SITE_URL =
 export const SITE_NAME = 'Neoquim Indústrias Químicas';
 
 export const SITE_DESCRIPTION =
-  'Química industrial para tintas, vernizes e perfuração de petróleo. Secantes metálicos, resinas alquídicas, dispersantes e insumos para fluidos de perfuração, com Sistema de Gestão da Qualidade certificado ISO 9001:2015.';
+  'Especialistas em Química Industrial. Secantes metálicos, resinas alquídicas, dispersantes e insumos para fluidos de perfuração, com Sistema de Gestão da Qualidade certificado ISO 9001:2015.';
 
 /** `Sobre nós | Neoquim Indústrias Químicas` */
 export function pageTitle(titulo: string) {

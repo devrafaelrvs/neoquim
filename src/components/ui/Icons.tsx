@@ -28,6 +28,14 @@ export function ShieldIcon(props: IconProps) {
   );
 }
 
+export function CheckIcon(props: IconProps) {
+  return (
+    <svg {...base} aria-hidden {...props}>
+      <path d="m5 13 4 4L19 7" />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon(props: IconProps) {
   return (
     <svg {...base} aria-hidden {...props}>

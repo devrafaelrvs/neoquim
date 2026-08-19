@@ -6,9 +6,9 @@ export interface PilarSustentabilidade {
 }
 
 export const SUSTENTABILIDADE_PAGE = {
-  heroTitulo: 'Sustentabilidade',
+  heroTitulo: 'Compromisso com a Sustentabilidade.',
   heroSubtitulo:
-    'Reaproveitamento total da água de processo, geração própria de energia limpa e uma linha de produtos de base renovável.',
+    'Atuamos com foco na economia circular por meio do reaproveitamento da água industrial, autogeração de energia limpa e fabricação de produtos de origem renovável.',
   ctaTitulo: 'Quer saber mais sobre nossas práticas?',
   ctaTexto:
     'Nosso time técnico detalha os processos e fornece as informações que sua auditoria ou cadeia de suprimentos precisar.',
@@ -33,7 +33,7 @@ export const PILARES: PilarSustentabilidade[] = [
   {
     titulo: 'Usina Solar Fotovoltaica',
     descricao:
-      'Instalação de uma Usina Solar Fotovoltaica com injeção na rede elétrica.',
+      'Energia Solar FotovoltaicaInstalação de usina solar conectada à rede (on-grid), gerando economia real e sustentabilidade para o seu negócio.',
     imagem: '/images/usina-solar.jpg',
     imagemAlt:
       'Vista aérea das placas fotovoltaicas instaladas sobre os galpões da Neoquim',
@@ -41,7 +41,7 @@ export const PILARES: PilarSustentabilidade[] = [
   {
     titulo: 'Linhas de Produtos Biodegradáveis',
     descricao:
-      'Ésteres de base renovável das linhas NEOGREEN e UNIGREEN, desenvolvidos como alternativa biodegradável para lubrificação, veículo de formulação e fluidos de perfuração.',
+      'Inovação em Sustentabilidade:  Nossa linha de ésteres de base renovável oferecem uma alternativa biodegradável de alta performance. São soluções ideais para lubrificação, veículos de formulação e fluidos de perfuração,aliando eficiência tecnológica à preservação ambiental.',
     imagem: '/images/tanques-verdes.jpg',
     imagemAlt: 'Tanques verdes de estocagem a granel no pátio da Neoquim',
   },

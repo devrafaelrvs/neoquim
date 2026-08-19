@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { ButtonLink } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
-import { ArrowRightIcon } from '@/components/ui/Icons';
+import { ArrowRightIcon, CheckIcon } from '@/components/ui/Icons';
 import { ROUTES } from '@/constants/routes.constants';
 import { HOME_HERO } from '@/page/home/constants/home.constants';
 
@@ -33,6 +33,20 @@ export function HeroSection() {
           <p className="max-w-2xl text-base leading-relaxed text-white/85 md:text-lg">
             {HOME_HERO.subtitulo}
           </p>
+
+          <ul className="flex max-w-2xl flex-col gap-3">
+            {HOME_HERO.destaques.map((destaque) => (
+              <li key={destaque.titulo} className="flex gap-3">
+                <CheckIcon className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                <p className="text-sm leading-relaxed text-white/85 md:text-base">
+                  <strong className="font-semibold text-white">
+                    {destaque.titulo}:
+                  </strong>{' '}
+                  {destaque.texto}
+                </p>
+              </li>
+            ))}
+          </ul>
 
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href={ROUTES.produtos} variant="accent" size="lg">

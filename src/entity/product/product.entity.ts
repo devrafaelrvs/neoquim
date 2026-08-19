@@ -1,6 +1,6 @@
 export const PRODUCT_SLUGS = [
   'petroleo-perfuracao',
-  'secantes-octoatos-naftenatos',
+  'secantes-octoatos',
   'resinas-alquidicas',
   'acidos-graxos',
   'catalisadores',

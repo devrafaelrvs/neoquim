@@ -1,8 +1,21 @@
 export const HOME_HERO = {
   eyebrow: 'Desde 1983 · Itaquaquecetuba/SP',
-  titulo: 'Química industrial para tintas, vernizes e perfuração de petróleo',
+  titulo: 'Especialistas em Química Industrial',
   subtitulo:
-    'Secantes metálicos, resinas alquídicas, dispersantes e insumos para fluidos de perfuração — fabricados com Sistema de Gestão da Qualidade certificado.',
+    'Desenvolvemos insumos de alta performance para os setores de Tintas, Vernizes e Perfuração de Petróleo.',
+  /** Bullets do hero: rótulo em negrito + o que ele entrega. */
+  destaques: [
+    {
+      titulo: 'Portfólio Técnico',
+      texto:
+        'Secantes metálicos, resinas alquídicas, dispersantes e insumos para fluidos de perfuração.',
+    },
+    {
+      titulo: 'Garantia de Excelência',
+      texto:
+        'Processos rigorosos com Sistema de Gestão da Qualidade certificado.',
+    },
+  ],
   imagem: '/images/planta-aerea.jpg',
   imagemAlt: 'Vista aérea da unidade fabril da Neoquim em Itaquaquecetuba/SP',
   ctaPrimario: 'Ver produtos',
@@ -18,9 +31,9 @@ export interface Mercado {
 
 export const MERCADOS: Mercado[] = [
   {
-    titulo: 'Petróleo Perfuração',
+    titulo: 'Inovação Química na Indústria Petrolífera',
     descricao:
-      'Lubrificantes, Redutores, Emulsificantes primários e secundários.',
+      'Atendemos às demandas mais complexas do setor de perfuração de petróleo com produtos rigorosamente testados. Através do fornecimento de lubrificantes especializados, redutores e sistemas de emulsificantes primários e secundários, entre outros. Entregamos a confiabilidade que sua operação exige no campo.',
     imagem: '/images/petroleo.jpg',
     imagemAlt:
       'Parque de tanques de armazenagem de matérias-primas da Neoquim',
@@ -28,7 +41,7 @@ export const MERCADOS: Mercado[] = [
   {
     titulo: 'Tintas e Vernizes',
     descricao:
-      'Secantes, resinas alquídicas, dispersantes e inibidores de secatividade.',
+      'Parceiro estratégico para a indústria química. Fornecemos matérias-primas de alta tecnologia, incluindo resinas alquídicas, secantes, dispersantes e inibidores de secatividade, assegurando a padronização e a excelência que a sua produção exige.',
     imagem: '/images/tintas.jpg',
     imagemAlt:
       'Galpão da Neoquim com tambores de insumos químicos paletizados',
@@ -36,7 +49,7 @@ export const MERCADOS: Mercado[] = [
   {
     titulo: 'Revenda e Importação',
     descricao:
-      'Distribuição de matérias-primas químicas nacionais e importadas.',
+      'Distribuição Química Global Logistica eficiente na revenda e importação de matérias-primas nacionais e internacionais de alta qualidade.',
     imagem: '/images/planta-aerea.jpg',
     imagemAlt:
       'Vista aérea dos galpões e do parque de tanques da Neoquim em Itaquaquecetuba/SP',

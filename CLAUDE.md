@@ -492,8 +492,9 @@ achável de qualquer página, mas não disputa espaço com o funil comercial.
 
 | # | Slug | Título | Descrição |
 |---|---|---|---|
-| 1 | `petroleo-perfuracao` | Petróleo Perfuração | Lubrificantes, Redutores, Emulsificantes primários e secundários. |
-| 2 | `secantes-octoatos-naftenatos` | Secantes — Octoatos e Naftenatos | Sabões metálicos para secagem de tintas industriais, produzidos desde 1987. |
+| 1 | `petroleo-perfuracao` | Inovação Química na Indústria Petrolífera | Atendemos às demandas mais complexas do setor de perfuração de petróleo com produtos rigorosamente testados. Através do fornecimento de lubrificantes especializados, redutores e sistemas de emulsificantes primários e secundários, entre outros.
+Entregamos a confiabilidade que sua operação exige no campo. |
+| 2 | `secantes-octoatos` | Secantes — Octoatos | Sabões metálicos para secagem de tintas industriais, produzidos desde 1987. |
 | 3 | `resinas-alquidicas` | Resinas Alquídicas | Resinas curtas, médias e longas em óleo para tintas e vernizes. |
 | 4 | `acidos-graxos` | Ácidos Graxos | Matéria-prima para resinas, dispersantes e formulações industriais. |
 | 5 | `catalisadores` | Catalisadores | Catalisadores para processos de esterificação e polimerização. |
@@ -501,7 +502,7 @@ achável de qualquer página, mas não disputa espaço com o funil comercial.
 | 7 | `tinta-base-solvente` | Tinta Base Solvente | Insumos completos para formulações base solvente. |
 | 8 | `tinta-base-agua` | Tinta Base D'água | Aditivos e secantes desenvolvidos para sistemas aquosos. |
 | 9 | `tinta-off-set` | Tinta Off-Set | Insumos para tintas gráficas de impressão off-set. |
-| 10 | `revenda-materia-prima` | Revenda de Matéria Prima | Distribuição de matérias-primas químicas nacionais e importadas. |
+| 10 | `revenda-materia-prima` | Revenda de Matéria Prima | Distribuição Química Global Logistica eficiente na revenda e importação de matérias-primas nacionais e internacionais de alta qualidade. |
 | 11 | `dispersantes-inibidores` | Dispersantes e Inibidores | Dispersantes de pigmentos e inibidores de secatividade. |
 
 `petroleo-perfuracao` é o **destaque** no topo de `/produtos`, em card largo com imagem.
@@ -515,7 +516,7 @@ informações" (→ `/contato`) → imagem → 4 produtos relacionados.
 **"Linha e aplicações"** (`ProductLine.tsx`) é uma lista de grupos, cada um com `titulo` opcional e
 itens `{ nome, descricao }` — nome comercial em negrito, descrição técnica ao lado. O `titulo` separa
 aplicações dentro do mesmo produto: Catalisadores divide em Resina Alquídica e Resina Poliéster,
-Revenda em Ácidos e Outros, Secantes em Octoatos, Off-set, Misturas e Naftenatos. Produto sem essa
+Revenda em Ácidos e Outros, Secantes em Octoatos e Misturas de octoatos. Produto sem essa
 divisão traz um único grupo sem título.
 
 As descrições são **transcrição literal** da apresentação comercial da Neoquim. Percentual, faixa de
@@ -524,16 +525,23 @@ temperatura e proporção de uso são informação de formulação — não rees
 O material da Neoquim é organizado por mercado e o site por produto. Onde um slide de mercado
 descreve algo que tem página própria, o conteúdo mora na página específica e não é duplicado: as
 resinas alquídicas, os octoatos e os dispersantes que aparecem sob "Tinta Base Solvente" no material
-estão em `/produtos/resinas-alquidicas`, `/produtos/secantes-octoatos-naftenatos` e
+estão em `/produtos/resinas-alquidicas`, `/produtos/secantes-octoatos` e
 `/produtos/dispersantes-inibidores`. `tinta-base-solvente` fica com o NEOMUL.
 
 ### Home
 
 **Hero** — eyebrow: `DESDE 1983 · ITAQUAQUECETUBA/SP`
-Título: *"Química industrial para tintas, vernizes e perfuração de petróleo"*
-Subtítulo: *"Secantes metálicos, resinas alquídicas, dispersantes e insumos para fluidos de
-perfuração — fabricados com Sistema de Gestão da Qualidade certificado."*
+Título: *"Especialistas em Química Industrial"*
+Subtítulo: *"Desenvolvemos insumos de alta performance para os setores de Tintas, Vernizes e
+Perfuração de Petróleo."*
+Dois bullets em `HOME_HERO.destaques` (`{ titulo, texto }`, rótulo em negrito + o que entrega):
+**Portfólio Técnico** — *"Secantes metálicos, resinas alquídicas, dispersantes e insumos para
+fluidos de perfuração."* · **Garantia de Excelência** — *"Processos rigorosos com Sistema de Gestão
+da Qualidade certificado."*
 CTAs: **Ver produtos** (→ `/produtos`) · **Solicitar orçamento** (→ `/contato`)
+
+`SITE_DESCRIPTION` (em `constants/seo.constants.ts`) abre com a mesma frase do título — ao mexer em
+um, confira o outro.
 
 **Faixa de certificação** — *"A Neoquim Indústrias Químicas Ltda possui seu Sistema de Gestão da
 Qualidade certificado conforme requisitos da norma **ISO 9001:2015**, pelo organismo TÜV NORD Brasil."*
@@ -542,9 +550,10 @@ Qualidade certificado conforme requisitos da norma **ISO 9001:2015**, pelo organ
 
 | Título | Descrição | Imagem |
 |---|---|---|
-| Petróleo Perfuração | Lubrificantes, Redutores, Emulsificantes primários e secundários. | `petroleo.jpg` |
-| Tintas e Vernizes | Secantes, resinas alquídicas, dispersantes e inibidores de secatividade. | `tintas.jpg` |
-| Revenda e Importação | Distribuição de matérias-primas químicas nacionais e importadas. | `planta-aerea.jpg` |
+| Inovação Química na Indústria Petrolífera | Atendemos às demandas mais complexas do setor de perfuração de petróleo com produtos rigorosamente testados. Através do fornecimento de lubrificantes especializados, redutores e sistemas de emulsificantes primários e secundários, entre outros.
+Entregamos a confiabilidade que sua operação exige no campo. | `petroleo.jpg` |
+| Tintas e Vernizes | Parceiro estratégico para a indústria química. Fornecemos matérias-primas de alta tecnologia, incluindo resinas alquídicas, secantes, dispersantes e inibidores de secatividade, assegurando a padronização e a excelência que a sua produção exige. | `tintas.jpg` |
+| Revenda e Importação | Distribuição Química Global Logistica eficiente na revenda e importação de matérias-primas nacionais e internacionais de alta qualidade. | `planta-aerea.jpg` |
 
 **Bloco de CTA** — *"Precisa de um insumo sob especificação?"* / *"Nossa equipe técnica desenvolve
 formulações e ajusta produtos conforme a necessidade da sua linha de produção."* → **Falar com o comercial**
@@ -596,7 +605,7 @@ Três pilares, cada um foto de um lado e texto do outro, alternando o lado a cad
 | Pilar | Texto | Imagem |
 |---|---|---|
 | Tratamento de Efluentes | Estação própria, com reaproveitamento de 100% da água utilizada na produção. | `ete-efluentes.jpg` |
-| Usina Solar Fotovoltaica | Instalação de uma Usina Solar Fotovoltaica com injeção na rede elétrica. | `usina-solar.jpg` |
+| Usina Solar Fotovoltaica | Energia Solar FotovoltaicaInstalação de usina solar conectada à rede (on-grid), gerando economia real e sustentabilidade para o seu negócio. | `usina-solar.jpg` |
 | Linhas de Produtos Biodegradáveis | Ésteres de base renovável NEOGREEN e UNIGREEN. | `tanques-verdes.jpg` |
 
 Os dois primeiros textos são da Neoquim. O terceiro veio sem redação definida e sem foto indicada:
