@@ -307,6 +307,7 @@ export const PRODUCTS: Product[] = [
       'Caminhão-tanque em carregamento a granel no pátio da Neoquim',
     destaqueHome: true,
   },
+  
   {
     slug: 'tinta-base-solvente',
     titulo: 'Tinta Base Solvente',
@@ -330,19 +331,7 @@ export const PRODUCTS: Product[] = [
       'Corredor do galpão da Neoquim com tambores de insumos paletizados',
     destaqueHome: true,
   },
-  {
-    slug: 'tinta-base-agua',
-    titulo: "Tinta Base D'água",
-    descricao: 'Aditivos e secantes desenvolvidos para sistemas aquosos.',
-    detalhe:
-      'Aditivos e secantes desenvolvidos especificamente para sistemas aquosos.',
-    // PENDENTE: sem slide correspondente no material técnico recebido.
-    linha: [],
-    imagem: '/images/tanques-processo.jpg',
-    imagemAlt:
-      'Tanques de processo e utilidades ao longo do pátio da Neoquim',
-    destaqueHome: true,
-  },
+
   {
     slug: 'tinta-off-set',
     titulo: 'Tinta Off-Set',
