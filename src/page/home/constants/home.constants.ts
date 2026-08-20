@@ -42,7 +42,7 @@ export const MERCADOS: Mercado[] = [
     titulo: 'Tintas e Vernizes',
     descricao:
       'Parceiro estratégico para a indústria química. Fornecemos matérias-primas de alta tecnologia, incluindo resinas alquídicas, secantes, dispersantes e inibidores de secatividade, assegurando a padronização e a excelência que a sua produção exige.',
-    imagem: '/images/tintas.jpg',
+    imagem: '/images/reator.jpeg',
     imagemAlt:
       'Galpão da Neoquim com tambores de insumos químicos paletizados',
   },

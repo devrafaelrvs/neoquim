@@ -10,7 +10,7 @@ export const SOBRE_PAGE = {
   imagemPlanta: '/images/planta-aerea.jpg',
   imagemPlantaAlt:
     'Vista aérea da unidade fabril da Neoquim em Itaquaquecetuba/SP',
-  imagemReatores: '/images/reatores.jpg',
+  imagemReatores: '/images/galpao.jpeg',
   imagemReatoresAlt:
     'Interior da fábrica da Neoquim, com os reatores e a plataforma de operação da linha de produção',
 } as const;

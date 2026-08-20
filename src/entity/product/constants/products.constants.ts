@@ -281,11 +281,11 @@ export const PRODUCTS: Product[] = [
   },
   {
     slug: 'ester',
-    titulo: 'Éster — NEOGREEN e UNIGREEN',
+    titulo: 'Éster',
     descricao:
       'Linha de ésteres de base renovável para aplicações de alto desempenho.',
     detalhe:
-      'Linhas NEOGREEN e UNIGREEN: ésteres de base renovável desenvolvidos para aplicações de alto desempenho.',
+      'Linhas NEOGREEN e UNIGREEN: ésteres de base renovável desenvolvidos para aplicações de alto desempenho, entre em contato, pois podemos desenvolver um Éster exclusivo pra sua empresa ou conforme sua necessidade.',
     linha: [
       {
         itens: [
@@ -325,7 +325,7 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    imagem: '/images/tambores-galpao.jpg',
+    imagem: '/images/reator2.jpeg',
     imagemAlt:
       'Corredor do galpão da Neoquim com tambores de insumos paletizados',
     destaqueHome: true,
@@ -482,7 +482,7 @@ export const PRODUCTS: Product[] = [
         ],
       },
     ],
-    imagem: '/images/tintas.jpg',
+    imagem: '/images/reator.jpeg',
     imagemAlt:
       'Galpão da Neoquim com tambores de insumos químicos paletizados',
     destaqueHome: false,

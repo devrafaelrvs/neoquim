@@ -33,7 +33,7 @@ export const PILARES: PilarSustentabilidade[] = [
   {
     titulo: 'Usina Solar Fotovoltaica',
     descricao:
-      'Energia Solar FotovoltaicaInstalação de usina solar conectada à rede (on-grid), gerando economia real e sustentabilidade para o seu negócio.',
+      'Energia Solar Fotovoltaica, Instalação de usina solar conectada à rede (on-grid), gerando economia real e sustentabilidade para o nosso negócio.',
     imagem: '/images/usina-solar.jpg',
     imagemAlt:
       'Vista aérea das placas fotovoltaicas instaladas sobre os galpões da Neoquim',
