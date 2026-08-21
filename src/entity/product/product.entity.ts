@@ -6,7 +6,6 @@ export const PRODUCT_SLUGS = [
   'catalisadores',
   'ester',
   'tinta-base-solvente',
-  'tinta-base-agua',
   'tinta-off-set',
   'revenda-materia-prima',
   'dispersantes-inibidores',

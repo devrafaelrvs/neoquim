@@ -17,8 +17,6 @@ import type { Product } from '@/entity/product/product.entity';
  * `petroleo-perfuracao`. O título do produto nomeia a linha UNIGREEN, e é o
  * lubrificante que a descrição de Inovação Química na Indústria Petrolífera promete — tirá-lo de
  * qualquer um dos dois deixaria a página incompleta. CONFIRMAR com o comercial.
- *
- * PENDENTE: `tinta-base-agua` não tem nenhum slide no material recebido.
  */
 export const PRODUCTS: Product[] = [
   {
