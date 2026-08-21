@@ -20,12 +20,21 @@ export function Logo({ className }: { className?: string }) {
       aria-label={`${COMPANY.nome} — página inicial`}
       className={className}
     >
+      {/*
+        `unoptimized` de propósito: o arquivo tem 15KB e renderiza a ~50px de
+        altura, mas o `width` declarado é a dimensão intrínseca (1483px). Sem
+        prop `sizes`, o Next monta o srcset a partir dela e pedia as variantes
+        1920w e 3840w — as maiores do site — em toda página, header e footer,
+        para um PNG que o WebP quase não encolhe. Servir o original direto sai
+        mais barato que manter essas duas variantes no cache.
+      */}
       <Image
         src="/logo/logo-neoquim-branco.png"
         alt={COMPANY.razaoSocial}
         width={1483}
         height={799}
         priority
+        unoptimized
         className="h-12 w-auto md:h-14"
       />
     </Link>
