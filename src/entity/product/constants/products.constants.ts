@@ -81,9 +81,9 @@ export const PRODUCTS: Product[] = [
     slug: 'secantes-octoatos',
     titulo: 'Secantes — Octoatos',
     descricao:
-      'Sabões metálicos para secagem de tintas industriais, produzidos desde 1987.',
+      'Secagem de tintas industriais, produzidos desde 1987.',
     detalhe:
-      'Linha de sabões metálicos para aplicação industrial em tintas, fabricada pela Neoquim desde 1987.',
+      'Para aplicação industrial em tintas, fabricada pela Neoquim desde 1987.',
     linha: [
       {
         titulo: 'Catalizadores octoatos',
